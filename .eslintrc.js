@@ -4,6 +4,7 @@ module.exports = {
 		"es6": true,
 		"node": true
 	},
+	"parser": 'babel-eslint',
 	"extends": "eslint:recommended",
 	"globals": {
 		"Atomics": "readonly",
@@ -27,5 +28,6 @@ module.exports = {
 		"prefer-arrow-callback": "error",
 		"strict": "error",
 		"symbol-description": "error",
+		'class-methods-use-this': ["error"],
 	}
 };
