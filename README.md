@@ -13,6 +13,7 @@ The Backend was implemented using:
  * Install [Node js](https://nodejs.org/en/)
  * Clone the repository `https://github.com/Daymorelah/pali-labs.git` 
  * Navigate to the project directory
+ * Run `yarn install` to install all dependencies
  * Run `docker build -t pali-labs-image .` to build an image of the app using doicker
  * Run `docker run -it -p 3334:2323 -v $(pwd):/src  pali-labs-image` to start the app using docker.
  * The app runs on localhost using port 3334.
