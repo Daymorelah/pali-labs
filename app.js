@@ -23,6 +23,15 @@ app.all('*', (req, res) => {
   });
 });
 
+// Catch all unexpected errors.
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    code: 500,
+    message: 'Internal server error. Something really bad happened.',
+  });
+  next();
+});
+
 app.listen(PORT, (error) => {
   if (error) return console.error('Could not start the server!, Error that occurred is: ', error);
   return console.info(`Server is up and running on port ${PORT}`);

@@ -3,12 +3,15 @@ import axios from 'axios';
 class handleGetMenuIds {
   static menuIdWithIngredient = {};
   static leastIngredient = 0;
-  static mealId = 0;
+  static mealId;
 
   /**
-   * This method creates an object with menuId and number of ingredients required for the
-   * meal to be prepared as key-value pairs respectively.
-   * @param {array} listOfMenu = An array of objects. with each menu-description as objects of the array.
+   * This method creates an object with menuId and number
+   * of ingredients required for the meal to be prepared as
+   * key-value pairs respectively.
+   *
+   * @param {array} listOfMenu = An array of objects. with each 
+   * enu-description as objects of the array.
    */
   static setNumberOfIngredientsPerMenuId = listOfMenu => {
     listOfMenu.forEach(menu => {
@@ -21,8 +24,10 @@ class handleGetMenuIds {
   }
 
   /**
-   * This method gets the minimum number of ingredients from the menuIdWithIngredient object
-   * and sets it as the menuID with the least number of ingredients required to prepare the meal.
+   * This method gets the minimum number of ingredients
+   * from the menuIdWithIngredient object and sets it as
+   * the menuID with the least number of ingredients
+   * required to prepare the meal.
    */
   static setMenuIdWithLeastIngredient = () => {
     handleGetMenuIds.leastIngredient = Math.min(...Object.values(handleGetMenuIds.menuIdWithIngredient));
@@ -32,8 +37,11 @@ class handleGetMenuIds {
   }
 
   /**
-   * This method is a route handler. It sends a request ot the theMealDB.com API
-   * and returns the menuId with the least number of ingredients required to prepare it.
+   * This method is a route handler.
+   * It sends a request ot the theMealDB.com API
+   * and returns the menuId with the least number
+   * of ingredients required to prepare it.
+   *
    * POST: /menu/ids
    * @param {object} req - HTTP Request object
    * @param {object} res - HTTP response object 
@@ -50,12 +58,24 @@ class handleGetMenuIds {
       responses.forEach(response => listOfMenu.push(response.data.meals[0]));
       handleGetMenuIds.setNumberOfIngredientsPerMenuId(listOfMenu);
       handleGetMenuIds.setMenuIdWithLeastIngredient();
-    }));
-    res.status(200).json({
-      status: 'success',
-      mealId: `${handleGetMenuIds.mealId}`,
-      message: `Meal with the least ingredient is ${handleGetMenuIds.mealId}.`,
+    })).catch(err => {
+      if(err.code === 'ENOTFOUND'){
+        res.status(400).json({
+          message: 'Could not connect to the internet. Please check your network connection'
+        });
+      } else {
+        res.status(400).json({
+          message: 'Could not get meal details. Please check your network connection'
+        });
+      }
     });
+    if(handleGetMenuIds.mealId) {
+      return res.status(200).json({
+        status: 'success',
+        mealId: `${handleGetMenuIds.mealId}`,
+        message: `Meal with the least ingredient is ${handleGetMenuIds.mealId}.`,
+      });
+    }
   }
 }
 
